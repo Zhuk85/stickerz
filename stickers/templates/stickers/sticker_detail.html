@@ -1,0 +1,77 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Детали стикера" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container full-width">
+        <h1>{{ sticker.description }}</h1>
+        <div class="city-sticker proportion-{{ sticker.proportion|slugify }}">
+            {% if sticker.image %}
+                <img src="{{ sticker.image.url }}" alt="{% trans 'Стикер' %}">
+            {% elif sticker.video %}
+                <video controls>
+                    <source src="{{ sticker.video.url }}" type="video/mp4">
+                    {% trans "Ваш браузер не поддерживает видео." %}
+                </video>
+            {% endif %}
+            <div class="city-overlay">
+                <span>{% trans "Город" %}: {{ sticker.city.name }}</span>
+                <p>{% trans "Категория" %}: {{ sticker.category.name }}</p>
+                <p>{% trans "Автор" %}: {{ sticker.user.username }}
+                    {% if user.is_authenticated and user != sticker.user %}
+                        <a href="{% url 'start_chat' user_id=sticker.user.id %}">{% trans "Написать сообщение" %}</a>
+                    {% endif %}
+                </p>
+                <p>{% trans "Лайков" %}: {{ sticker.like_count }}</p>
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'toggle_like' sticker.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="like-button {% if sticker.is_liked %}active{% endif %}">
+                            <i class="fas fa-heart"></i> {{ sticker.like_count }}
+                        </button>
+                    </form>
+                    {% if user == sticker.user or user.is_staff %}
+                        {% if user == sticker.user %}
+                            <a href="{% url 'edit_sticker' sticker.id %}">{% trans "Редактировать" %}</a>
+                        {% endif %}
+                        <a href="{% url 'delete_sticker' sticker.id %}">
+                            {% if user.is_staff and user != sticker.user %}
+                                {% trans "Удалить (Админ)" %}
+                            {% else %}
+                                {% trans "Удалить" %}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+                {% endif %}
+                {% if sticker.navigation_link %}
+                    <a href="{{ sticker.navigation_link }}" target="_blank">{% trans "Открыть на карте" %}</a>
+                {% endif %}
+            </div>
+        </div>
+        <h3>{% trans "Комментарии" %}</h3>
+        <form method="post" action="{% url 'add_comment' sticker.id %}">
+            {% csrf_token %}
+            <textarea name="comment_text" placeholder="{% trans 'Ваш комментарий' %}" required></textarea>
+            <button type="submit">{% trans "Добавить комментарий" %}</button>
+        </form>
+        <div>
+            {% for comment in comments %}
+                <div class="category-card">
+                    <p>{{ comment.user.username }}: {{ comment.text }} ({{ comment.created_at }})</p>
+                </div>
+            {% empty %}
+                <p>{% trans "Комментариев пока нет." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

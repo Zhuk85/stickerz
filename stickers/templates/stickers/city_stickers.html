@@ -1,0 +1,50 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% blocktrans with city_name=city.name %}Категории города {{ city_name }}{% endblocktrans %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container full-width">
+        <h1>{% blocktrans with city_name=city.name %}Категории города {{ city_name }}{% endblocktrans %}</h1>
+        <form method="get" class="search-form">
+            <select name="category">
+                <option value="">{% trans "Все категории" %}</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category_filter == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <select name="sort">
+                <option value="-created_at" {% if sort_by == '-created_at' %}selected{% endif %}>{% trans "Новые сверху" %}</option>
+                <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>{% trans "Старые сверху" %}</option>
+            </select>
+            <button type="submit">{% trans "Фильтровать" %}</button>
+        </form>
+        <div class="masonry">
+            {% for category_entry in categories_with_stickers %}
+                <div class="city-sticker">
+                    <a href="{% url 'category_stickers' city.slug category_entry.category.id %}">
+                        {% if category_entry.category.image and category_entry.category.image.url %}
+                            <img src="{{ category_entry.category.image.url }}" alt="{{ category_entry.category.name }}">
+                        {% elif category_entry.sticker and category_entry.sticker.image %}
+                            <img src="{{ category_entry.sticker.image.url }}" alt="{{ category_entry.category.name }}">
+                        {% else %}
+                            <div class="no-image">{% trans "Нет изображения" %}</div>
+                        {% endif %}
+                        <div class="city-overlay">{{ category_entry.category.name }}</div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>{% trans "Нет категорий с стикерами в этом городе..." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

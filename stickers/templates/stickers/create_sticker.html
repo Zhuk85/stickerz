@@ -1,0 +1,170 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Создать стикер" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <style>
+        .video-trim-preview {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        .video-trim-preview img {
+            width: 100px;
+            height: auto;
+        }
+        .preview-error {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container">
+        <h1>{% trans "Создать стикер" %}</h1>
+        {% if error %}
+            <p class="error" style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="description">{% trans "Описание" %}</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="city">{% trans "Город" %}</label>
+                <select id="city" name="city" required>
+                    {% for city in cities %}
+                        <option value="{{ city.id }}">{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="category">{% trans "Категория" %}</label>
+                <select id="category" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="navigation_link">{% trans "Навигационная ссылка (опционально)" %}</label>
+                <input type="url" id="navigation_link" name="navigation_link">
+            </div>
+            <div class="form-group">
+                <label for="proportion">{% trans "Пропорции" %}</label>
+                <select id="proportion" name="proportion">
+                    <option value="1:1">1:1</option>
+                    <option value="9:16">9:16</option>
+                    <option value="16:9">16:9</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="media_file">{% trans "Изображение или видео" %}</label>
+                <input type="file" id="media_file" name="media_file" accept="image/*,video/mp4,video/webm" required>
+            </div>
+            <div class="form-group video-trim" style="display: none;">
+                <label>{% trans "Обрезка видео (секунды)" %}</label>
+                <input type="number" name="video_start" value="0" min="0" step="0.1" required oninput="updateTrimPreview()">
+                <input type="number" name="video_end" value="30" min="0.1" step="0.1" required oninput="updateTrimPreview()">
+                <div class="video-trim-preview">
+                    <img id="start-frame" src="" alt="Первый кадр">
+                    <img id="end-frame" src="" alt="Последний кадр">
+                </div>
+                <div id="preview-error" class="preview-error" style="display: none;">{% trans "Не удалось загрузить кадры видео." %}</div>
+            </div>
+            <div class="form-group thumbnail-time" style="display: none;">
+                <label>{% trans "Выберите кадр для превью (секунды)" %}</label>
+                <input type="range" name="thumbnail_time" min="0" max="30" value="15" step="0.1" oninput="this.nextElementSibling.value = this.value">
+                <output>15</output>
+            </div>
+            <button type="submit">{% trans "Создать" %}</button>
+        </form>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+    <script>
+        let currentVideo = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const mediaFileInput = document.getElementById('media_file');
+            const videoTrimSection = document.querySelector('.video-trim');
+            const thumbnailTimeSection = document.querySelector('.thumbnail-time');
+            const previewError = document.getElementById('preview-error');
+
+            mediaFileInput.addEventListener('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const mimeType = file.type;
+                    if (mimeType.startsWith('video/')) {
+                        videoTrimSection.style.display = 'block';
+                        thumbnailTimeSection.style.display = 'block';
+                        // Устанавливаем максимальное время слайдера на основе длительности видео
+                        currentVideo = document.createElement('video');
+                        currentVideo.preload = 'metadata';
+                        currentVideo.onloadedmetadata = function() {
+                            window.URL.revokeObjectURL(currentVideo.src);
+                            const duration = Math.min(currentVideo.duration, 30);
+                            document.querySelector('input[name="thumbnail_time"]').max = duration;
+                            document.querySelector('input[name="video_end"]').max = duration;
+                            document.querySelector('input[name="thumbnail_time"]').value = duration / 2;
+                            document.querySelector('input[name="thumbnail_time"]').nextElementSibling.value = duration / 2;
+                            updateTrimPreview();
+                        };
+                        currentVideo.onerror = function() {
+                            previewError.style.display = 'block';
+                        };
+                        currentVideo.src = URL.createObjectURL(file);
+                    } else {
+                        videoTrimSection.style.display = 'none';
+                        thumbnailTimeSection.style.display = 'none';
+                        previewError.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        function updateTrimPreview() {
+            if (!currentVideo) {
+                document.getElementById('preview-error').style.display = 'block';
+                return;
+            }
+
+            const startTime = parseFloat(document.querySelector('input[name="video_start"]').value);
+            const endTime = parseFloat(document.querySelector('input[name="video_end"]').value);
+            const startFrame = document.getElementById('start-frame');
+            const endFrame = document.getElementById('end-frame');
+            const previewError = document.getElementById('preview-error');
+
+            // Получаем кадры
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = currentVideo.videoWidth;
+            canvas.height = currentVideo.videoHeight;
+
+            // Первый кадр
+            currentVideo.currentTime = startTime;
+            currentVideo.onseeked = function() {
+                ctx.drawImage(currentVideo, 0, 0, canvas.width, canvas.height);
+                startFrame.src = canvas.toDataURL('image/jpeg');
+                // Переходим ко второму кадру
+                currentVideo.currentTime = endTime;
+                currentVideo.onseeked = function() {
+                    ctx.drawImage(currentVideo, 0, 0, canvas.width, canvas.height);
+                    endFrame.src = canvas.toDataURL('image/jpeg');
+                    previewError.style.display = 'none';
+                };
+            };
+            currentVideo.onerror = function() {
+                previewError.style.display = 'block';
+            };
+        }
+    </script>
+</body>
+</html>

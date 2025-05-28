@@ -1,0 +1,44 @@
+# Python и Django
+*.pyc
+__pycache__/
+*.pyo
+*.pyd
+
+# Виртуальное окружение
+venv/
+.venv/
+
+# Секреты и конфиги
+.env
+
+# Локальная база данных
+*.sqlite3
+db.sqlite3
+db.sqlite3.backup
+
+# Медиафайлы
+media/*
+!media/.gitkeep  # Если хочешь оставить пустую папку media в репо
+
+# Статические файлы, собранные collectstatic (если используешь)
+staticfiles/
+
+# Логи
+*.log
+
+# Служебные файлы Windows
+desktop.ini
+Thumbs.db
+
+# Локальные IDE-файлы
+.vscode/
+.idea/
+
+# Кэш и временные файлы
+*.cache
+*.bak
+*.swp
+
+# среда
+get/
+.get/

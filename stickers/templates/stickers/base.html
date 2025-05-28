@@ -1,0 +1,43 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Stickers{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'stickers/css/style.css' %}">
+    <!-- Подключаем noUiSlider для слайдера -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+</head>
+<body>
+    <!-- Шапка -->
+    {% include 'stickers/header.html' %}
+
+    <!-- Уведомления -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container full-width">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <!-- Футер -->
+    <footer>
+        <p>© 2025 Stickers App</p>
+    </footer>
+
+    <!-- Подключаем noUiSlider для слайдера -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

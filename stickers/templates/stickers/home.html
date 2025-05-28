@@ -1,0 +1,45 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Главная" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container full-width">
+        <h1>{% trans "Выберите город" %}</h1>
+        <div class="masonry">
+            {% for city in city_stickers %}
+                <div class="city-sticker">
+                    <a href="{% url 'city_stickers' city.city %}">
+                        {% if city.image %}
+                            <img src="{{ city.image.url }}" alt="{{ city.original_name }}">
+                        {% elif city.sticker %}
+                            {% if city.sticker.image %}
+                                <img src="{{ city.sticker.image.url }}" alt="{{ city.original_name }}">
+                            {% elif city.sticker.video %}
+                                {% if city.sticker.video_thumbnail %}
+                                    <img src="{{ city.sticker.video_thumbnail.url }}" alt="{{ city.original_name }}">
+                                {% else %}
+                                    <div class="no-image">{% trans "Превью отсутствует" %}</div>
+                                {% endif %}
+                            {% else %}
+                                <div class="no-image">{% trans "Нет изображения" %}</div>
+                            {% endif %}
+                        {% else %}
+                            <div class="no-image">{% trans "Нет изображения" %}</div>
+                        {% endif %}
+                        <div class="city-overlay">{{ city.original_name }}</div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

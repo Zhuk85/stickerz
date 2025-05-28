@@ -1,0 +1,163 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Редактировать стикер" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container">
+        <h1>{% trans "Редактировать стикер" %}</h1>
+        {% if error %}
+            <p class="error" style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form method="post" enctype="multipart/form-data" id="stickerForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="description">{% trans "Описание" %}:</label>
+                <textarea name="description" id="description" required>{{ sticker.description }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="city">{% trans "Город" %}:</label>
+                <select name="city" id="city" required>
+                    {% for city in cities %}
+                        <option value="{{ city.id }}" {% if city.id == sticker.city.id %}selected{% endif %}>{{ city.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="category">{% trans "Категория" %}:</label>
+                <select name="category" id="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id == sticker.category.id %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="navigation_link">{% trans "Навигационная ссылка (2GIS/Google Maps)" %}:</label>
+                <input type="url" name="navigation_link" id="navigation_link" value="{{ sticker.navigation_link }}">
+            </div>
+            <div class="form-group">
+                <label for="proportion">{% trans "Пропорции" %}:</label>
+                <select name="proportion" id="proportion">
+                    <option value="1:1" {% if sticker.proportion == "1:1" %}selected{% endif %}>1:1</option>
+                    <option value="16:9" {% if sticker.proportion == "16:9" %}selected{% endif %}>16:9</option>
+                    <option value="9:16" {% if sticker.proportion == "9:16" %}selected{% endif %}>9:16</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="media_file">{% trans "Новый файл (изображение или видео, опционально)" %}:</label>
+                <input type="file" name="media_file" id="media_file" accept="image/*,video/mp4,video/webm" onchange="previewMedia()">
+            </div>
+            <div id="mediaPreview">
+                <video id="videoPreview" controls style="display: none; max-width: 50%; height: auto;">
+                    <source id="videoSource" src="" type="video/mp4">
+                    {% trans "Ваш браузер не поддерживает видео." %}
+                </video>
+                <img id="imagePreview" src="" style="display: none; max-width: 50%;">
+            </div>
+            <div id="videoTrimControls" style="display: none; margin-top: 10px;">
+                <label>{% trans "Обрезать видео (перетащите слайдеры, чтобы выбрать 30-секундный сегмент)" %}:</label>
+                <div id="videoSlider" style="margin: 20px 0;"></div>
+                <input type="hidden" name="video_start" id="video_start" value="0">
+                <input type="hidden" name="video_end" id="video_end" value="30">
+                <p>{% trans "Выбранная длительность" %}: <span id="trimDuration">30</span> {% trans "секунд" %}</p>
+            </div>
+            <button type="submit">{% trans "Сохранить изменения" %}</button>
+        </form>
+        <p><a href="{% url 'sticker_detail' sticker_id=sticker.id %}">{% trans "Вернуться к стикеру" %}</a></p>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+    <script>
+    function previewMedia() {
+        const mediaFile = document.getElementById('media_file').files[0];
+        const videoPreview = document.getElementById('videoPreview');
+        const videoSource = document.getElementById('videoSource');
+        const imagePreview = document.getElementById('imagePreview');
+        const trimControls = document.getElementById('videoTrimControls');
+        const videoSlider = document.getElementById('videoSlider');
+
+        if (!mediaFile) {
+            videoPreview.style.display = 'none';
+            imagePreview.style.display = 'none';
+            trimControls.style.display = 'none';
+            return;
+        }
+
+        const mimeType = mediaFile.type;
+        if (mimeType.startsWith('video')) {
+            videoPreview.style.display = 'block';
+            imagePreview.style.display = 'none';
+            trimControls.style.display = 'block';
+
+            const url = URL.createObjectURL(mediaFile);
+            videoSource.src = url;
+            videoPreview.load();
+
+            videoPreview.onloadedmetadata = function() {
+                const duration = videoPreview.duration;
+                console.log(`Video duration: ${duration} seconds`);
+                const slider = noUiSlider.create(videoSlider, {
+                    start: [0, Math.min(30, duration)],
+                    connect: true,
+                    range: {
+                        'min': 0,
+                        'max': duration
+                    },
+                    step: 0.1,
+                    behaviour: 'drag',
+                    tooltips: [true, true],
+                    format: {
+                        to: function(value) {
+                            return value.toFixed(1);
+                        },
+                        from: function(value) {
+                            return Number(value);
+                        }
+                    }
+                });
+
+                slider.on('update', function(values) {
+                    const start = parseFloat(values[0]);
+                    const end = parseFloat(values[1]);
+                    const duration = end - start;
+                    document.getElementById('trimDuration').textContent = duration.toFixed(1);
+                    document.getElementById('video_start').value = start;
+                    document.getElementById('video_end').value = end;
+                    videoPreview.currentTime = start;
+
+                    if (duration > 30) {
+                        slider.set([start, start + 30]);
+                    }
+                });
+
+                videoPreview.addEventListener('timeupdate', function() {
+                    const currentTime = videoPreview.currentTime;
+                    const [start, end] = slider.get();
+                    if (currentTime >= end) {
+                        videoPreview.currentTime = start;
+                    }
+                });
+            };
+        } else if (mimeType.startsWith('image')) {
+            imagePreview.style.display = 'block';
+            videoPreview.style.display = 'none';
+            trimControls.style.display = 'none';
+            const url = URL.createObjectURL(mediaFile);
+            imagePreview.src = url;
+        } else {
+            videoPreview.style.display = 'none';
+            imagePreview.style.display = 'none';
+            trimControls.style.display = 'none';
+        }
+    }
+    </script>
+</body>
+</html>

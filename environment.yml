@@ -1,0 +1,11 @@
+name: stickers
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pyav
+  - pillow=9.4.0
+  - pip
+  - pip:
+      - django

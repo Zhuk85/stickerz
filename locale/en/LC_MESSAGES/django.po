@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-13 14:00+0000\n"
+"PO-Revision-Date: 2025-03-13 14:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Stickers"
+msgstr "Stickers"
+
+msgid "Поиск"
+msgstr "Search"
+
+msgid "Топ-10"
+msgstr "Top-10"
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Профиль ({{ username }})"
+msgstr "Profile ({{ username }})"
+
+msgid "Создать стикер"
+msgstr "Create Sticker"
+
+msgid "Выход"
+msgstr "Logout"
+
+msgid "Вход"
+msgstr "Login"
+
+msgid "Регистрация"
+msgstr "Register"
+
+msgid "Stickers - Главная"
+msgstr "Stickers - Home"
+
+msgid "Выберите город"
+msgstr "Select City"
+
+msgid "Нет изображения"
+msgstr "No Image"
+
+msgid "Stickers - {{ city_name }}"
+msgstr "Stickers - {{ city_name }}"
+
+msgid "Категории города {{ city_name }}"
+msgstr "Categories of {{ city_name }}"
+
+msgid "Нет категорий с стикерами в этом городе..."
+msgstr "No categories with stickers in this city..."
+
+msgid "Стикеры в {{ city_name }} - {{ category_name }}"
+msgstr "Stickers in {{ city_name }} - {{ category_name }}"
+
+msgid "{{ likes_count }} лайк"
+msgid_plural "{{ likes_count }} лайков"
+msgstr[0] "{{ likes_count }} like"
+msgstr[1] "{{ likes_count }} likes"
+msgstr[2] "{{ likes_count }} likes"
+
+msgid "Пока нет стикеров в этой категории..."
+msgstr "No stickers in this category yet..."
+
+msgid "Стикер - {{ description }}"
+msgstr "Sticker - {{ description }}"
+
+msgid "Город:"
+msgstr "City:"
+
+msgid "Категория:"
+msgstr "Category:"
+
+msgid "Где нас найти:"
+msgstr "Where to find us:"
+
+msgid "Лайков:"
+msgstr "Likes:"
+
+msgid "Комментарии"
+msgstr "Comments"
+
+msgid "{{ username }}: {{ text }} ({{ date }})"
+msgstr "{{ username }}: {{ text }} ({{ date }})"
+
+msgid "Пока нет комментариев."
+msgstr "No comments yet."
+
+msgid "Добавить комментарий:"
+msgstr "Add comment:"
+
+msgid "Отправить"
+msgstr "Send"
+
+msgid "Создать новый стикер"
+msgstr "Create New Sticker"
+
+msgid "Описание:"
+msgstr "Description:"
+
+msgid "Изображение (опционально):"
+msgstr "Image (optional):"
+
+msgid "Ссылка на навигацию (2GIS/Google Maps, опционально):"
+msgstr "Navigation link (2GIS/Google Maps, optional):"
+
+msgid "https://2gis.kz/... или https://maps.google.com/..."
+msgstr "https://2gis.kz/... or https://maps.google.com/..."
+
+msgid "Профиль пользователя {{ username }}"
+msgstr "User Profile {{ username }}"
+
+msgid "Уведомления"
+msgstr "Notifications"
+
+msgid "{{ message }} ({{ date }})"
+msgstr "{{ message }} ({{ date }})"
+
+msgid "Посмотреть стикер"
+msgstr "View Sticker"
+
+msgid "У вас пока нет уведомлений."
+msgstr "You have no notifications yet."
+
+msgid "Мои стикеры"
+msgstr "My Stickers"
+
+msgid "У вас пока нет стикеров."
+msgstr "You have no stickers yet."
+
+msgid "Создайте свой первый стикер!"
+msgstr "Create your first sticker!"
+
+msgid "Топ-10 стикеров"
+msgstr "Top-10 Stickers"
+
+msgid "Пока нет стикеров для рейтинга."
+msgstr "No stickers for ranking yet."
+
+msgid "Все города"
+msgstr "All Cities"
+
+msgid "Все категории"
+msgstr "All Categories"
+
+msgid "Новые сверху"
+msgstr "Newest First"
+
+msgid "Старые сверху"
+msgstr "Oldest First"
+
+msgid "По популярности"
+msgstr "By Popularity"
+
+msgid "По алфавиту"
+msgstr "Alphabetically"
+
+msgid "Искать"
+msgstr "Search"
+
+msgid "Ничего не найдено."
+msgstr "Nothing found."
+
+msgid "Войти через Google"
+msgstr "Login with Google"
+
+msgid "Зарегистрироваться"
+msgstr "Register"

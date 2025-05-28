@@ -1,0 +1,30 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Вход" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container">
+        <h1>{% trans "Вход" %}</h1>
+        {% if form.errors %}
+            <p class="error" style="color: red;">{% trans "Ошибка: проверьте правильность логина и пароля." %}</p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">{% trans "Войти" %}</button>
+        </form>
+        <p>{% trans "-- Или войдите через --" %}</p>
+        <a href="{% url 'social:begin' 'google-oauth2' %}" class="social-button">{% trans "Войти через Google" %}</a>
+        <p>{% trans "Нет аккаунта?" %} <a href="{% url 'register' %}">{% trans "Зарегистрироваться" %}</a></p>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

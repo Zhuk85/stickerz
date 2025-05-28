@@ -1,0 +1,38 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Удалить стикер" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container">
+        <h1>{% trans "Удалить стикер" %}</h1>
+        <div class="sticker">
+            {% if sticker.image %}
+                <img src="{{ sticker.image.url }}" alt="{% trans 'Стикер' %}">
+            {% elif sticker.video %}
+                <video controls>
+                    <source src="{{ sticker.video.url }}" type="video/mp4">
+                    {% trans "Ваш браузер не поддерживает видео." %}
+                </video>
+            {% endif %}
+            <div class="city-overlay">
+                <span>{% trans "Вы уверены, что хотите удалить стикер" %} "{{ sticker.description }}"?</span>
+                <p>{% trans "Это действие нельзя отменить. Все связанные лайки, комментарии и уведомления также будут удалены." %}</p>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">{% trans "Удалить" %}</button>
+                    <a href="{% url 'sticker_detail' sticker.id %}">{% trans "Отмена" %}</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

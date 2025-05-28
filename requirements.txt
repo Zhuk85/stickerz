@@ -1,0 +1,6 @@
+django==5.2.1
+social-auth-app-django==5.4.3
+moviepy==1.0.3
+Pillow==9.4.0
+transliterate
+django-background-tasks

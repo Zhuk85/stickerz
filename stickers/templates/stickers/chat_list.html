@@ -1,0 +1,40 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Ваши чаты" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container">
+        <h1>{% trans "Ваши чаты" %}</h1>
+        <div class="chat-list">
+            {% for chat in chats %}
+                <a href="{% url 'chat_detail' chat.id %}" class="chat-item">
+                    <div class="chat-info">
+                        <h3>{{ chat.get_other_participant.user.username }}</h3>
+                        <p>
+                            {% if chat.last_message %}
+                                {{ chat.last_message.content|truncatechars:50 }}
+                            {% else %}
+                                {% trans "Нет сообщений" %}
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if chat.unread_count > 0 %}
+                        <span class="unread-count">{{ chat.unread_count }}</span>
+                    {% endif %}
+                </a>
+            {% empty %}
+                <p>{% trans "У вас пока нет чатов." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

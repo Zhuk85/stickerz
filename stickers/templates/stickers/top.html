@@ -1,0 +1,59 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Топ-10 стикеров" %}</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    {% include 'stickers/header.html' %}
+
+    <div class="container full-width">
+        <h1>{% trans "Топ-10 стикеров" %}</h1>
+        <div class="masonry">
+            {% for sticker in top_stickers %}
+                <div class="city-sticker proportion-{{ sticker.proportion|slugify }}">
+                    <a href="{% url 'sticker_detail' sticker.id %}">
+                        {% if sticker.image %}
+                            <img src="{{ sticker.image.url }}" alt="{{ sticker.description }}">
+                        {% elif sticker.video %}
+                            <div class="video-container">
+                                {% if sticker.video_thumbnail %}
+                                    <img src="{{ sticker.video_thumbnail.url }}" alt="{{ sticker.description }}" class="thumbnail">
+                                {% else %}
+                                    <div class="no-image">{% trans "Превью отсутствует" %}</div>
+                                {% endif %}
+                                <video class="sticker-video" muted loop>
+                                    <source src="{{ sticker.video.url }}" type="video/mp4">
+                                    {% trans "Ваш браузер не поддерживает видео." %}
+                                </video>
+                            </div>
+                        {% else %}
+                            <div class="no-image">{% trans "Нет изображения" %}</div>
+                        {% endif %}
+                        <div class="city-overlay">
+                            {{ sticker.description|truncatewords:10 }}
+                            {% if user.is_authenticated %}
+                                <form method="post" action="{% url 'toggle_like' sticker.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="like-button {% if sticker.is_liked %}active{% endif %}">
+                                        <i class="fas fa-heart"></i> {{ sticker.like_count }}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <span>{{ sticker.like_count }} {% trans "лайков" %}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                </div>
+            {% empty %}
+                <p>{% trans "Стикеров пока нет." %}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script src="{% static 'stickers/js/scripts.js' %}"></script>
+</body>
+</html>

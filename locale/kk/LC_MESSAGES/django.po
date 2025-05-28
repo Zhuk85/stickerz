@@ -1,0 +1,179 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-13 14:00+0000\n"
+"PO-Revision-Date: 2025-03-13 14:00+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: kk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Stickers"
+msgstr "Стикерлер"
+
+msgid "Поиск"
+msgstr "Іздеу"
+
+msgid "Топ-10"
+msgstr "Топ-10"
+
+msgid "Главная"
+msgstr "Басты бет"
+
+msgid "Профиль ({{ username }})"
+msgstr "Профиль ({{ username }})"
+
+msgid "Создать стикер"
+msgstr "Стикер жасау"
+
+msgid "Выход"
+msgstr "Шығу"
+
+msgid "Вход"
+msgstr "Кіру"
+
+msgid "Регистрация"
+msgstr "Тіркелу"
+
+msgid "Stickers - Главная"
+msgstr "Стикерлер - Басты бет"
+
+msgid "Выберите город"
+msgstr "Қаланы таңдаңыз"
+
+msgid "Нет изображения"
+msgstr "Сурет жоқ"
+
+msgid "Stickers - {{ city_name }}"
+msgstr "Стикерлер - {{ city_name }}"
+
+msgid "Категории города {{ city_name }}"
+msgstr "{{ city_name }} қаласының санаттары"
+
+msgid "Нет категорий с стикерами в этом городе..."
+msgstr "Бұл қалада стикерлері бар санаттар жоқ..."
+
+msgid "Стикеры в {{ city_name }} - {{ category_name }}"
+msgstr "{{ city_name }} қаласындағы стикерлер - {{ category_name }}"
+
+msgid "{{ likes_count }} лайк"
+msgid_plural "{{ likes_count }} лайков"
+msgstr[0] "{{ likes_count }} лайк"
+msgstr[1] "{{ likes_count }} лайк"
+msgstr[2] "{{ likes_count }} лайк"
+
+msgid "Пока нет стикеров в этой категории..."
+msgstr "Бұл санатта әзірге стикерлер жоқ..."
+
+msgid "Стикер - {{ description }}"
+msgstr "Стикер - {{ description }}"
+
+msgid "Город:"
+msgstr "Қала:"
+
+msgid "Категория:"
+msgstr "Санат:"
+
+msgid "Где нас найти:"
+msgstr "Бізді қайдан табуға болады:"
+
+msgid "Лайков:"
+msgstr "Лайктар:"
+
+msgid "Комментарии"
+msgstr "Пікірлер"
+
+msgid "{{ username }}: {{ text }} ({{ date }})"
+msgstr "{{ username }}: {{ text }} ({{ date }})"
+
+msgid "Пока нет комментариев."
+msgstr "Әзірге пікірлер жоқ."
+
+msgid "Добавить комментарий:"
+msgstr "Пікір қосу:"
+
+msgid "Отправить"
+msgstr "Жіберу"
+
+msgid "Создать новый стикер"
+msgstr "Жаңа стикер жасау"
+
+msgid "Описание:"
+msgstr "Сипаттама:"
+
+msgid "Изображение (опционально):"
+msgstr "Сурет (міндетті емес):"
+
+msgid "Ссылка на навигацию (2GIS/Google Maps, опционально):"
+msgstr "Навигация сілтемесі (2GIS/Google Maps, міндетті емес):"
+
+msgid "https://2gis.kz/... или https://maps.google.com/..."
+msgstr "https://2gis.kz/... немесе https://maps.google.com/..."
+
+msgid "Профиль пользователя {{ username }}"
+msgstr "{{ username }} пайдаланушы профилі"
+
+msgid "Уведомления"
+msgstr "Хабарламалар"
+
+msgid "{{ message }} ({{ date }})"
+msgstr "{{ message }} ({{ date }})"
+
+msgid "Посмотреть стикер"
+msgstr "Стикерді қарау"
+
+msgid "У вас пока нет уведомлений."
+msgstr "Сізде әзірге хабарламалар жоқ."
+
+msgid "Мои стикеры"
+msgstr "Менің стикерлерім"
+
+msgid "У вас пока нет стикеров."
+msgstr "Сізде әзірге стикерлер жоқ."
+
+msgid "Создайте свой первый стикер!"
+msgstr "Алғашқы стикеріңізді жасаңыз!"
+
+msgid "Топ-10 стикеров"
+msgstr "Топ-10 стикерлер"
+
+msgid "Пока нет стикеров для рейтинга."
+msgstr "Рейтинг үшін әзірге стикерлер жоқ."
+
+msgid "Все города"
+msgstr "Барлық қалалар"
+
+msgid "Все категории"
+msgstr "Барлық санаттар"
+
+msgid "Новые сверху"
+msgstr "Жаңалары жоғарыда"
+
+msgid "Старые сверху"
+msgstr "Ескілері жоғарыда"
+
+msgid "По популярности"
+msgstr "Танымалдығы бойынша"
+
+msgid "По алфавиту"
+msgstr "Алфавит бойынша"
+
+msgid "Искать"
+msgstr "Іздеу"
+
+msgid "Ничего не найдено."
+msgstr "Ештеңе табылмады."
+
+msgid "Войти через Google"
+msgstr "Google арқылы кіру"
+
+msgid "Зарегистрироваться"
+msgstr "Тіркелу"

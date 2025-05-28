@@ -1,0 +1,42 @@
+{% load i18n %}
+
+<header class="site-header">
+    <div class="header-container">
+        <div class="logo">
+            <a href="{% url 'home' %}">{% trans "Stickers" %}</a>
+        </div>
+        <nav class="header-nav">
+            <a href="{% url 'home' %}">{% trans "Главная" %}</a>
+            <a href="{% url 'search' %}">{% trans "Поиск" %}</a>
+            <a href="{% url 'top_stickers' %}">{% trans "Топ-10" %}</a>
+            <a href="{% url 'chat_list' %}">{% trans "Чаты" %}</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="profile-link">
+                    {% blocktrans with username=user.username %}Профиль ({{ username }}){% endblocktrans %}
+                    {% if notification_count > 0 %}
+                        <span class="notification-badge">{{ notification_count }}</span>
+                    {% endif %}
+                </a>
+                <a href="{% url 'create_sticker' %}">{% trans "Создать стикер" %}</a>
+                <a href="{% url 'logout' %}">{% trans "Выход" %}</a>
+            {% else %}
+                <a href="{% url 'login' %}">{% trans "Вход" %}</a>
+                <a href="{% url 'register' %}">{% trans "Регистрация" %}</a>
+            {% endif %}
+            <div class="language-switcher">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <select name="language" onchange="this.form.submit()">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% for lang in LANGUAGES %}
+                            <option value="{{ lang.0 }}" {% if lang.0 == LANGUAGE_CODE %}selected{% endif %}>
+                                {{ lang.1 }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+        </nav>
+    </div>
+</header>
