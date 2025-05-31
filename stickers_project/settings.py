@@ -3,11 +3,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'your-secret-key'
+SECRET_KEY = 'your-secret-key'  # ВНИМАНИЕ: Замените на уникальный ключ в продакшене!
 
-DEBUG = True
+DEBUG = True  # ВНИМАНИЕ: Установите False в продакшене!
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [] # ВНИМАНИЕ: Заполните для продакшена!
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -16,15 +16,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'stickers.apps.StickersConfig',
-    'social_django',
-    'background_task',
+    'stickers.apps.StickersConfig',  # Ваше приложение stickers
+    'social_django',                 # Для социальной аутентификации
+    'background_task',               # Для фоновых задач
+    # 'channels', # Если вы используете Django Channels, добавьте его сюда (обычно не нужно для Channels v3+)
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware', # Для поддержки языков
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -37,7 +38,7 @@ ROOT_URLCONF = 'stickers_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'], # Общая папка для шаблонов проекта, если нужна
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -45,14 +46,17 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
+                'social_django.context_processors.backends',      # Для social_django
+                'social_django.context_processors.login_redirect', # Для social_django
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'stickers_project.wsgi.application'
+
+# Добавлено для Django Channels
+ASGI_APPLICATION = 'stickers.asgi.application' # Указывает на ASGI конфигурацию в вашем приложении stickers
 
 DATABASES = {
     'default': {
@@ -76,22 +80,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
-USE_TZ = True
-
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "stickers/static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+LANGUAGE_CODE = 'en-us' # Язык по умолчанию
 
 LANGUAGES = [
     ('ru', 'Russian'),
@@ -102,19 +91,40 @@ LOCALE_PATHS = [
     BASE_DIR / 'locale',
 ]
 
+TIME_ZONE = 'UTC'
+
+USE_I18N = True # Включить интернационализацию
+
+USE_TZ = True # Использовать часовые пояса
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    BASE_DIR / "stickers/static"  # Статические файлы вашего приложения stickers
+]
+STATIC_ROOT = BASE_DIR / "staticfiles" # Для сбора статики в продакшене
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media' # Для загружаемых пользователем файлов
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
-    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.google.GoogleOAuth2', # Аутентификация через Google
+    'django.contrib.auth.backends.ModelBackend', # Стандартная аутентификация Django
 )
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-client-id'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-google-client-secret'
+# Настройки social_django для Google OAuth2
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your-google-client-id' # ВНИМАНИЕ: Замените на ваш Client ID
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your-google-client-secret' # ВНИМАНИЕ: Замените на ваш Client Secret
 
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
-SOCIAL_AUTH_LOGIN_ERROR_URL = '/login/'
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/' # Куда перенаправлять после успешной социальной аутентификации
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/login/' # Куда перенаправлять при ошибке социальной аутентификации
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/profile/' # Куда перенаправлять нового пользователя после регистрации через соцсеть
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'login' # URL для стандартного входа
+
+# Настройки для django-background-tasks
+# BACKGROUND_TASK_RUN_ASYNC = True # Если хотите запускать задачи асинхронно (может потребовать доп. настройки)
 
 LOGGING = {
     'version': 1,
@@ -123,7 +133,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'debug.log',
+            'filename': BASE_DIR / 'debug.log', # Путь к лог-файлу
         },
         'console': {
             'level': 'DEBUG',
@@ -131,9 +141,19 @@ LOGGING = {
         },
     },
     'loggers': {
-        'stickers.views': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO', # Уровень логирования для Django (можно поставить DEBUG для более подробных логов)
+            'propagate': True,
+        },
+        'stickers.views': { # Логирование для конкретного модуля вашего приложения
             'handlers': ['file', 'console'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'background_task': { # Логирование для django-background-tasks
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
             'propagate': True,
         },
     },
